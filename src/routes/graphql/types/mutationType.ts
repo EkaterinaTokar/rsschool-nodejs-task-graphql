@@ -13,6 +13,39 @@ export type Context = {
 export const mutationType = new GraphQLObjectType({
     name: 'Mutation',
     fields: () => ({
-        
+        createPost: {
+            type: PostType,
+            args: {
+                dto: { type: new GraphQLNonNull(CreatePostInputType) }
+            },
+            resolve: async (parent, { dto }: { dto: CreatePostInput }, { prisma }: Context) => {
+                return await prisma.post.create({
+                    data: dto
+                });
+            }
+        },
+        createUser: {
+            type: UserType as GraphQLObjectType,
+            args: {
+                dto: { type: new GraphQLNonNull(CreateUserInputType) }
+            },
+            resolve: async (parent, { dto }: { dto: CreateUserInput }, { prisma }: Context) => {
+                return prisma.user.create({
+                    data: dto
+                });
+            }
+        },
+        createProfile: {
+            type: ProfileType,
+            args: {
+                dto: { type: new GraphQLNonNull(CreateProfileInputType) }
+            },
+            resolve: async (parent, { dto }: { dto: CreateProfileInput }, { prisma }: Context) => {
+                console.log("createProfile", dto);
+                return await prisma.profile.create({
+                    data: { ...dto }
+                });
+            }
+        },
     })
 });
